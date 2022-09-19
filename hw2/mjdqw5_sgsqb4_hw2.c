@@ -18,3 +18,19 @@ int main(){
    
 }
 
+int readFile(FILE* fp,char* a)
+{
+   int i = 0;
+   char [100] fileName;
+   scanf("%s",fileName);
+
+   fp = fopen(fileName,'r');
+
+
+   while (fscanf(fp, "%[^\n] ", a) != EOF) {
+        
+    }
+      
+
+   
+}
