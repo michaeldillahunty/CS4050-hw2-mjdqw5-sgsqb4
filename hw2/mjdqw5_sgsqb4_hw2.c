@@ -27,7 +27,8 @@ int readFile(FILE* fp,char* a)
    fp = fopen(fileName,'r');
 
 
-   while (fscanf(fp, "%[^\n] ", a) != EOF) {
+   while (fp!= EOF) {
+      fscanf(fp, "%[^\n] ", a) != EOF);
         
     }
       
