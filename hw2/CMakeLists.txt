@@ -6,4 +6,9 @@ set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS "-std=c++0x -g -Wall -Werror")
 set(CMAKE_C_FLAGS "-std=c11 -g -Wall -Wextra")
 
-add_executable(mjdqw5_sgsqb4_hw2.c)
+add_executable(hw2_test mjdqw5_sgsqb4_hw2.c)
+target_link_libraries(gtest pthread)
+
+enable_testing()
+add_test(NAME  hw2_test
+         COMMAND hw2_test)
