@@ -2,5 +2,3 @@
 Homework 2 for CS4050  
 Michael Dillahunty - mjdqw5    
 Sawyer Seitz - sgsqb4
-hello  
-testing
