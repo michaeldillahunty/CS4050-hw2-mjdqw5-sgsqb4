@@ -83,12 +83,6 @@ char* read_file(FILE*fp, char* file_name){
    return tempArray;
 }
 
-
-/*fseek(fp,0L,SEEK_END)
-long int size = ftell(fp)
-*/
-
-
 int getLength(FILE* fp){
    int lineCount= 0;
    for(char c = getc(fp); c != EOF; c=getc(fp)){
@@ -96,12 +90,9 @@ int getLength(FILE* fp){
          lineCount++;
       }
    }
-   rewind(fp);
-   
+   rewind(fp);   
    return lineCount;
 }
-
-
 
 char* allocate_array(int size){
    char* temp;
