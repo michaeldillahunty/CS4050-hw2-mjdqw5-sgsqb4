@@ -45,3 +45,4 @@ int readFile(FILE* fp,char* a)
 int array_locate(void*data, void*target, int size, int count){
    
 }
+
