@@ -9,7 +9,7 @@ char* read_file(FILE*fp, char* file_name, int*arr_size);
 int partition(int arr[], int left, int right, int x);
 int xth_smallest(int arr[], int left, int right, int x);
 int getMedian(int arr[], int n);
-int compare(int a,int b);
+int compare(const void*c,const void* d);
 void swap(int*a, int*b);
 int string_to_int(char *str, int *converted_value);
 int* convert_array(char* cArr, int size);
@@ -54,24 +54,31 @@ int* convert_array(char* cArr, int size);
  int main(int argc, char*argv[]){
     
    FILE*fp = NULL; 
-   int* size = NULL;
+   int sizz = 0;
+   int* size = &sizz;
    int* intArr;
 
    printf("enter a file name with the extension: \n");
    if(argc != 1){
       exit(INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS);
    }
+   
    char*data_char = read_file(fp, argv[0], size);
+   
    intArr = convert_array(data_char,*size);
+   for(int k = 0;k<*size;k++){
+      printf("%d\n",intArr[k]);
+   }
    // int converted[];
    //int convert[] = string_to_int(data, &converted);
    //data++;
-   printf("xth smallest is %d", xth_smallest(intArr, 0, *size-1, intArr[0]));
+   printf("xth smallest is %d\n", xth_smallest(intArr, 0, *size-1, intArr[0]));
  }
 
 char* read_file(FILE*fp, char* file_name, int* arr_size){
    char *tempArray = NULL;
    scanf("%s", file_name);
+   
    fp = fopen(file_name, "r");
    // fp = fopen("input_file1.txt", "r");
    if (fp == NULL){  // file ptr check
@@ -84,14 +91,14 @@ char* read_file(FILE*fp, char* file_name, int* arr_size){
    size_t i = 0;
    while(fscanf(fp,"%[^\0]",&tempArray[i]) != EOF){
       // fscanf(fp,"%[^\n]",&tempArray[i]);
-      printf("%s", &tempArray[i]);
+     // printf("%s", &tempArray[i]);
       i++;
       
    }
-   if (!fclose(fp)){
-      exit(INPUT_FILE_FAILED_TO_CLOSE);
-   }
    
+   
+   
+ 
    return tempArray;
 }
 
@@ -149,6 +156,9 @@ void swap(int*a, int*b){
 }
 
 int xth_smallest(int arr[], int left, int right, int x){
+
+
+
    if (x<0 && x<=right-1+1){
       int num = right-+1;  // number of elements in arr
       int median[(num+4)/5]; // split into (n+4)/5 groups
@@ -181,13 +191,15 @@ int xth_smallest(int arr[], int left, int right, int x){
 
 // find median of an array
 int getMedian(int arr[], int n){
-   qsort(arr, n, sizeof(int), compare());
+   qsort(arr, n, sizeof(int), compare);
    return arr[n/2];
 }
 
 // comparator function for quick select
-int compare(int a,int b){
-   return a-b;
+int compare(const void*c,const void* d){
+   int* a = (int*)c;
+   int* b = (int*)d;
+   return *a-*b;
 }
 
 /* long int strtol(const char *str, char **endptr, int base)
@@ -210,6 +222,7 @@ int string_to_int(char *str, int *converted_value){
 }
 
 int* convert_array(char* cArr, int size){
+   
    int *res; 
    res = malloc(sizeof(int)*size); 
    if (res == NULL){
