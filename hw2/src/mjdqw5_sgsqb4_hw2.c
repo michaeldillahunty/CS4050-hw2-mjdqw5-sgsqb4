@@ -62,11 +62,11 @@ int* read_file(FILE*fp, char* file_name, int* arr_size){
    char str[MAX_VAL]; // 
    // while(fscanf(fp, "%[^\0]", &tempArray[i]) != EOF){
    while (fgets(str, MAX_VAL, fp)){ // read from file and store in str array
-      if (isdigit(str[0])){   // check if value is a digit
          x = atoi(str); // convert string to integers
+      if (isdigit(str[x])){   // check if value is a digit
          tempArray[i] = x; // store converted ints in tempArray
          i++;
-      } else if (str[0] == '-' || str[0] == ',' || str[0] == '.') { // error check for invalid characters
+      } else if (str[x] == '-' || str[x] == ',' || str[x] == '.' || isalpha(str[x])) { // error check for invalid characters and letters
          printf("ERROR: PARSING_ERROR_INVALID_CHARACTER_ENCOUNTERED\n");
          exit(PARSING_ERROR_INVALID_CHARACTER_ENCOUNTERED);
       } else if (fgetc(fp) == EOF) {   // error check if file is empty
@@ -74,6 +74,7 @@ int* read_file(FILE*fp, char* file_name, int* arr_size){
          exit(PARSING_ERROR_EMPTY_FILE);
       }
    }
+
    if (fclose(fp) != 0){ // if the file fails to close
       printf("ERROR: INPUT_FILE_FAILED_TO_CLOSE\n");
       exit(INPUT_FILE_FAILED_TO_CLOSE);
