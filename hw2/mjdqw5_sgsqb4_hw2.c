@@ -17,10 +17,10 @@ void* freeArray(int*);
 
 /** RETURN ERRORS:
    enum error {
-    X INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS = 1,
-    X INPUT_FILE_FAILED_TO_OPEN,
-    X INPUT_FILE_FAILED_TO_CLOSE,
-    X PARSING_ERROR_INVALID_CHARACTER_ENCOUNTERED,
+    INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS = 1,
+    INPUT_FILE_FAILED_TO_OPEN,
+    INPUT_FILE_FAILED_TO_CLOSE,
+    PARSING_ERROR_INVALID_CHARACTER_ENCOUNTERED,
     PARSING_ERROR_EMPTY_FILE,
    };
 */
@@ -33,10 +33,8 @@ int main(int argc, char*argv[]){
    int* size = &sizz;   
    
    printf("enter a file name with the extension: \n");
-   if(argc != 1){
-      printf("ERROR: INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS\n");
+   if(argc != 1) 
       exit(INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS);
-   } 
 
    int* data1 = read_file(fp, argv[0], size); // read integers into array with the beginnging of file(x) 
    printf("%dth smallest is %d\n",data1[0], xthSmallest(data1, 0, *size-1, data1[0]));  // output
@@ -49,8 +47,8 @@ int* read_file(FILE*fp, char* file_name, int* arr_size){
    scanf("%s", file_name); // scanf for user input filename
    
    fp = fopen(file_name, "r");   // open file in read
-   if (fp == NULL){  // valid file ptr check 
-      printf("ERROR: INPUT_FILE_FAILED_TO_OPEN\n");
+   // fp = fopen("input_file1.txt", "r");
+   if (fp == NULL){  // file ptr check
       exit(INPUT_FILE_FAILED_TO_OPEN);
    }
    
@@ -61,22 +59,16 @@ int* read_file(FILE*fp, char* file_name, int* arr_size){
    int x;
    char str[MAX_VAL]; // 
    // while(fscanf(fp, "%[^\0]", &tempArray[i]) != EOF){
-   while (fgets(str, MAX_VAL, fp)){ // read from file and store in str array
-         x = atoi(str); // convert string to integers
-      if (isdigit(str[x])){   // check if value is a digit
-         tempArray[i] = x; // store converted ints in tempArray
+   while (fgets(str, MAX_VAL, fp)){
+      if (isdigit(str[0])){
+         x = atoi(str);
+         tempArray[i] = x;    
          i++;
-      } else if (str[x] == '-' || str[x] == ',' || str[x] == '.' || isalpha(str[x])) { // error check for invalid characters and letters
-         printf("ERROR: PARSING_ERROR_INVALID_CHARACTER_ENCOUNTERED\n");
+      } else if (str[0] == '-' || str[0] == ',' || str[0] == '.' || isalpha(str[0])) {
          exit(PARSING_ERROR_INVALID_CHARACTER_ENCOUNTERED);
-      } else if (fgetc(fp) == EOF) {   // error check if file is empty
-         printf("ERROR: PARSING_ERROR_EMPTY_FILE\n");
-         exit(PARSING_ERROR_EMPTY_FILE);
       }
    }
-
-   if (fclose(fp) != 0){ // if the file fails to close
-      printf("ERROR: INPUT_FILE_FAILED_TO_CLOSE\n");
+   if (fclose(fp) != 0){
       exit(INPUT_FILE_FAILED_TO_CLOSE);
    } else fclose(fp);
    return tempArray;
@@ -85,9 +77,9 @@ int* read_file(FILE*fp, char* file_name, int* arr_size){
 // funciton to get length of file 
 int getLength(FILE* fp){
    int lineCount= 0; 
-   for(char c = getc(fp); c != EOF; c=getc(fp)){ // loop to get next value from file until the end of file
-      if(c == '\n'){ // if it's reached the new line char
-         lineCount++; // go to next line
+   for(char c = getc(fp); c != EOF; c=getc(fp)){ 
+      if(c == '\n'){
+         lineCount++;
       }
    }
    rewind(fp);   // put file pointer back at the beginning of file after looping througn
@@ -106,7 +98,6 @@ int* allocate_array(int size){
 }
 
 // function that swaps 2 integer values
-// reference: https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array-set-3-worst-case-linear-time/
 void swap(int*a, int*b){
    int temp = *a; 
    *a = *b;
@@ -115,7 +106,8 @@ void swap(int*a, int*b){
 
 // find median of an array
 int getMedian(int arr[], int n, int x){
-   xthSmallest(arr, 0, n-1, x); 
+   // quickSort(arr,0,n);
+   xthSmallest(arr, 0, n-1, x);
    printf("size of array is: %d\n",n);
       return arr[n/2];
 }
@@ -127,24 +119,22 @@ int compare(const void*c,const void* d){
    return *a-*b;
 }
 
-/* function to return x-th smallest value in array */ 
+
 int xthSmallest(int arr[], int left, int right, int x){
-   if (x>0 && x<=right-left+1){  // if x < the # of elems in array
-      int curr = partition(arr, left, right); // partition the array to get pivot element
-      if (curr - left == x - 1){ // check if current node is the same as x
+   if (x>0 && x<=right-left+1){
+      int curr = partition(arr, left, right);
+      if (curr - left == x - 1){
          return arr[curr];         
       }
-      if (curr-left > x-1){ // if curr position is > than x
-         return xthSmallest(arr, left, curr-1,x); // recursion to get the left sub array
+      if (curr-left > x-1){
+         return xthSmallest(arr, left, curr-1,x);
       } 
-      return xthSmallest(arr, curr+1, right, x-curr+left-1); // else recursively get right sub array
+      return xthSmallest(arr, curr+1, right, x-curr+left-1);
     }
-    return -1; // return on failure 
+    return -1;
 }
 
-/* partition function to search for x in the array, which then partitions the array around x node */
-/* reference: https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array-set-3-worst-case-linear-time/ */
-int partition(int arr[], int left, int right){ 
+int partition(int arr[], int left, int right){
    int temp_arr = arr[right];
    int i = left;
     for (int j = left; j <= right - 1; j++) {
@@ -160,6 +150,6 @@ int partition(int arr[], int left, int right){
 // function that frees our malloced a
 void* freeArray(int* a){
    free(a);
-   a = NULL; 
+   a = NULL;  // ;)
    return NULL;
 }
