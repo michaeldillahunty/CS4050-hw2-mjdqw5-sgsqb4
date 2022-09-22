@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <limits.h>
+#include <string.h>
 
 #define MAX_VAL 256
+
 int getLength(FILE* fp);
 int* allocate_array(int size);
 int* read_file(FILE*fp, char* file_name, int*arr_size);
@@ -16,7 +18,7 @@ int xthSmallest(int arr[], int left, int right, int x);
 void* freeArray(int*);
 
 
-/** RETURN ERRORS:
+/** EXIT ERRORS:
    enum error {
     INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS = 1,
     INPUT_FILE_FAILED_TO_OPEN,
@@ -32,26 +34,19 @@ int main(int argc, char*argv[]){
    FILE*fp = NULL; 
    int sizz = 0;        
    int* size = &sizz;   
-   
-   printf("enter a file name with the extension: \n");
-   if(argc != 1){
-      printf("ERROR: INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS\n");
+
+   int* data1 = read_file(fp, argv[1], size); // read integers into array with the beginnging of file(x)   
+   if (argc != 2){   // arguments error check
       exit(INCORRECT_NUMBER_OF_COMMAND_LINE_ARGUMENTS);
-   } 
-      
-
-
-
-   int* data1 = read_file(fp, argv[0], size); // read integers into array with the beginnging of file(x) 
-   
-   printf("%dth smallest is %d\n",data1[0], xthSmallest(data1, 0, *size-1, data1[0]));  // print data
+   }
+   printf("xth smallest: %d\n", xthSmallest(data1, 0, *size-1, data1[0]));  // print data
    freeArray(data1); // free memory allocated
 }
- 
+
 // function that reads file into an int array
 int* read_file(FILE*fp, char* file_name, int* arr_size){
    int *tempArray = NULL;  // init temp array to store converted values in
-   scanf("%s", file_name); // scanf for user input filename
+
    fp = fopen(file_name, "r"); // open file in read only 
    if (fp == NULL){  // file ptr check
       exit(INPUT_FILE_FAILED_TO_OPEN);
